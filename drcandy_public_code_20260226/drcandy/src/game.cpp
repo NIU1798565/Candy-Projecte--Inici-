@@ -123,43 +123,51 @@ void Game::render(GraphicManager& graphics)
                 }
             }
         }
-
     //Part 2: Dibuixar el bloc que cau (3 caramels en vertical)
-        graphics.drawImage(m_falling[0]->getResourceName(),
+        if(!m_gameOver)
+        {
+            graphics.drawImage(m_falling[0]->getResourceName(),
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
                 board_padding * CANDY_IMAGE_HEIGHT + m_fallingY * CANDY_IMAGE_HEIGHT);
 
-        graphics.drawImage(m_falling[1]->getResourceName(),
+           graphics.drawImage(m_falling[1]->getResourceName(),
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
                 board_padding * CANDY_IMAGE_HEIGHT + (m_fallingY + 1) * CANDY_IMAGE_HEIGHT);
 
-        graphics.drawImage(m_falling[2]->getResourceName(),
+           graphics.drawImage(m_falling[2]->getResourceName(),
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
                 board_padding * CANDY_IMAGE_HEIGHT + (m_fallingY + 2) * CANDY_IMAGE_HEIGHT);
 
                 /* al ser objectes dinamics hem d'utilitzar punters per accedir a la funcio getResourceName, utilitzem memoria dinamica perque aixi 
-        podem escollir quan desapareix l'objecte, si ho fessim amb objectes directes el creariem i desapareixeria en acabar la funcio */
-        
-    //Part 3: Dibuixar la puntuacio
-        graphics.drawText("Puntaucio: " + std::to_string(m_puntuacio), 450, 10, 70, 125, 200, 125);
-                                                            // posicio pixels (450, 10), mida lletra (70), color RGB verd suau (125, 200, 125)
+            podem escollir quan desapareix l'objecte, si ho fessim amb objectes directes el creariem i desapareixeria en acabar la funcio */
+        }
+    //Part 3: Mostrar gameover quan acabi la partida
+
+        if(m_gameOver == true)
+        {
+            graphics.drawText("GAME OVER", 200, 350, 70, 255, 0, 0);
+        }
 
     graphics.drawRectangle(
         CANDY_IMAGE_HEIGHT * board_padding, CANDY_IMAGE_HEIGHT * board_padding,
         CANDY_IMAGE_WIDTH * board_size,
         CANDY_IMAGE_HEIGHT * board_size,
         5, 150, 150, 150);
+
     // Board: place a candy piece
-    graphics.drawImage(Candy(CandyType::TYPE_PURPLE).getResourceName(),
+    /*graphics.drawImage(Candy(CandyType::TYPE_PURPLE).getResourceName(),
         CANDY_IMAGE_WIDTH * 3,
         CANDY_IMAGE_HEIGHT * 3);
+    */
+
     // Title [draw images]
     graphics.drawImage("img/logo_small.png", 10, 10);
+
     // Score and footer [draw text]
     graphics.drawText("Movement: [Up] [Down] [Left] [Right]  --  "
                       "Buttons: [Q] [W] [E]  --  Exit [ESC]",
                       25, 700, 20, 100, 100, 100);
-    graphics.drawText("Score: ", 450, 10, 70, 125, 200, 125);
+    graphics.drawText("Score: " + std::to_string(m_puntuacio), 450, 10, 70, 125, 200, 125);
 }
 
 void Game::run()
