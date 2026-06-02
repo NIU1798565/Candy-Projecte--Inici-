@@ -71,13 +71,43 @@ void Game::update(const Controller& controller)
 
 void Game::render(GraphicManager& graphics)
 {
-    // Implement your code here
-    aasdasda
-    
     // Note: the following code exhibits the main graphic library features
     // Board: border [draw rectangles] and a single piece of candy
     const int board_size = 10;
     const int board_padding = 3;
+
+    //Part 1: Dibuixar el tauler
+        for (int x = 0; x < m_board.getWidth(); x++)
+        {
+            for(int y = 0; y < m_board.getHeight(); y++)
+            {
+                const Candy* c = m_board.getCell(x,y);
+                if(c != nullptr)
+                {
+                    graphics.drawImage(c->getResourceName(), 
+                    board_padding * CANDY_IMAGE_WIDTH + x * CANDY_IMAGE_WIDTH,
+                    board_padding * CANDY_IMAGE_HEIGHT + y * CANDY_IMAGE_HEIGHT);
+                    /* columna × mida + marge = posició en píxels. La multi del padding es per separar-ho de la vora esquerra 3 pixels, 
+                    la de la x i la y on comença la columna o fila*/
+                }
+            }
+        }
+
+    //Part 2: Dibuixar el bloc que cau
+        graphics.drawImage(m_falling[0]->getResourceName(),
+                board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
+                board_padding * CANDY_IMAGE_HEIGHT + m_fallingY * CANDY_IMAGE_HEIGHT);
+        
+        graphics.drawImage(m_falling[1]->getResourceName(),
+                board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
+                board_padding * CANDY_IMAGE_HEIGHT + m_fallingY * CANDY_IMAGE_HEIGHT);
+        /* al ser objectes dinamics hem d'utilitzar punters per accedir a la funcio getResourceName, utilitzem memoria dinamica perque aixi 
+        podem escollir quan desapareix l'objecte, si ho fessim amb objectes directes el creariem i desapareixeria en acabar la funcio */
+
+    //Part 3: Dibuixar la puntuacio
+        graphics.drawText("Puntaucio: " + std::to_string(m_puntuacio), 450, 10, 70, 125, 200, 125);
+                                                            // posicio pixels (450, 10), mida lletra (70), color RGB verd suau (125, 200, 125)
+
     graphics.drawRectangle(
         CANDY_IMAGE_HEIGHT * board_padding, CANDY_IMAGE_HEIGHT * board_padding,
         CANDY_IMAGE_WIDTH * board_size,
