@@ -83,7 +83,11 @@ void Game::update(const Controller& controller)
             m_board.setCell(m_falling[1], m_fallingX, m_fallingY + 1);
             m_board.setCell(m_falling[2], m_fallingX, m_fallingY + 2);
 
-            m_board.explodeAndDrop();
+            std::vector<Candy*> explotats = m_board.explodeAndDrop();
+            m_puntuacio += explotats.size();
+            for(Candy* c : explotats) delete c;
+            /*Assignem el valor d'explotats a una variable que sumarem al total de puntuacio que tenim de manera que a cada cicle s'actualitzi punutacio
+            tambe esborrem, un cop acabada l'assignació, la memoria que ocupem creant la variable explotats */
 
             m_falling[0] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
             m_falling[1] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
