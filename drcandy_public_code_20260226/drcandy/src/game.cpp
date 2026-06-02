@@ -265,6 +265,41 @@ bool Game::load(const std::string& input_path)
 
 bool Game::operator==(const Game& other) const
 {
-    // Implement your code here
-    return false;
+    bool cerca = true;
+
+    //1: Dimensions del tauler
+    if (m_board.getWidth() != other.m_board.getWidth())   cerca = false;
+    if (m_board.getHeight() != other.m_board.getHeight()) cerca = false;
+
+    //2: Contingut de cada cel·la (comparar tipus, no punters)
+    for (int x = 0; x < m_board.getWidth() && cerca; x++)
+    {
+        for (int y = 0; y < m_board.getHeight() && cerca; y++)
+        {
+            const Candy* a = m_board.getCell(x, y);
+            const Candy* b = other.m_board.getCell(x, y);
+
+            if (a == nullptr && b == nullptr)
+            {
+                //tot bé
+            }
+            else if (a == nullptr || b == nullptr)      
+                cerca = false;
+            else if (a->getType() != b->getType())      
+                cerca = false;
+        }
+    }
+
+    //3: Bloc que cau (posicio i tipus)
+    if (m_fallingX != other.m_fallingX) 
+        cerca = false;
+    if (m_fallingY != other.m_fallingY) 
+        cerca = false;
+    for (int i = 0; i < 3 && cerca; i++)
+    {
+        if (m_falling[i]->getType() != other.m_falling[i]->getType())
+            cerca = false;
+    }
+
+    return cerca;
 }
