@@ -137,7 +137,7 @@ private:
     /// Students can add as many protected methods and attributes as needed.
     int m_boardWidth;
     int m_boardHeight;
-    Candy* m_cell[DEFAULT_BOARD_WIDTH][DEFAULT_BOARD_HEIGHT];
+    Candy*** m_cell;
     bool m_boardExplode[DEFAULT_BOARD_WIDTH][DEFAULT_BOARD_HEIGHT];
 
     bool hiHaExplosions() const;

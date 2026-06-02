@@ -20,9 +20,14 @@ Board::Board(int width, int height)
     m_boardWidth = width;
     m_boardHeight = height;
 
-    for (int x = 0; x < DEFAULT_BOARD_WIDTH; x++)
+    m_cell = new Candy**[m_boardWidth];
+    for(int i = 0; i < m_boardWidth; i++)
     {
-        for (int y = 0; y < DEFAULT_BOARD_HEIGHT; y++)
+        m_cell[i] = new Candy*[m_boardHeight];
+    }
+    for (int x = 0; x < m_boardWidth; x++)
+    {
+        for (int y = 0; y < m_boardHeight; y++)
         {
             m_cell[x][y] = nullptr;
             m_boardExplode[x][y] = false;
@@ -32,18 +37,11 @@ Board::Board(int width, int height)
 
 Board::~Board()
 {
-    for (int i = 0; i < DEFAULT_BOARD_WIDTH; i++)
+    for (int i = 0; i < m_boardWidth; i++)
     {
-        for (int j = 0; j < DEFAULT_BOARD_HEIGHT; j++)
-        {
-            if (m_cell[i][j] != nullptr)
-            {
-                delete m_cell[i][j];
-            }
-            m_cell[i][j] = nullptr;
-            m_boardExplode[i][j] = false;
-        }
+        delete[] m_cell[i];
     }
+    delete[] m_cell;
 }
 
 
