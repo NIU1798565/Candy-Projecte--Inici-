@@ -17,6 +17,8 @@ Game::Game()
     m_fallTimer = 30; /* comptador que anem decrementant a cada 
                       frame que pasa decreix de manera que a meitat 
                       de cicle (60 frames) s'actualitza */
+    m_gameOver = false;
+    m_vertical = true;
 }
 
 Game::~Game() //nomes es crida quan el programa tanca
@@ -31,6 +33,8 @@ void Game::update(const Controller& controller)
     // 3 blocs que es repeteixen a cada frame en ordre
 
     // 1: Llegir les tecles del controller
+    if(m_gameOver == false)
+    {
 
         if (controller.isLeftPressed() && m_fallingX > 0)
         {
@@ -87,7 +91,13 @@ void Game::update(const Controller& controller)
             m_fallingX = 4;
             m_fallingY = 0;
             m_fallTimer = 60;
+
+            if(m_board.getCell(4,0) != nullptr || m_board.getCell(4,1) != nullptr || m_board.getCell(4,2))
+            {
+                m_gameOver = true;
+            }
         }
+    }
 }
 
 void Game::render(GraphicManager& graphics)
