@@ -127,6 +127,9 @@ void Game::render(GraphicManager& graphics)
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
                 board_padding * CANDY_IMAGE_HEIGHT + (m_fallingY + 2) * CANDY_IMAGE_HEIGHT);
 
+                /* al ser objectes dinamics hem d'utilitzar punters per accedir a la funcio getResourceName, utilitzem memoria dinamica perque aixi 
+        podem escollir quan desapareix l'objecte, si ho fessim amb objectes directes el creariem i desapareixeria en acabar la funcio */
+        
     //Part 3: Dibuixar la puntuacio
         graphics.drawText("Puntaucio: " + std::to_string(m_puntuacio), 450, 10, 70, 125, 200, 125);
                                                             // posicio pixels (450, 10), mida lletra (70), color RGB verd suau (125, 200, 125)
