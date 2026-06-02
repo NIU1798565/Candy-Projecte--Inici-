@@ -262,6 +262,7 @@ bool Game::load(const std::string& input_path)
     return fitxer.good() || fitxer.eof();
 }
 
+
 bool Game::operator==(const Game& other) const
 {
     // Implement your code here
