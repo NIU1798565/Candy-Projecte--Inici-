@@ -182,7 +182,7 @@ bool Game::dump(const std::string& output_path) const
 
 bool Game::load(const std::string& input_path)
 {
-    // Implement your code here
+    // Implement your code her
     return false;
 }
 
