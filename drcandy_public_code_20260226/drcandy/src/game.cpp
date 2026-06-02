@@ -108,7 +108,12 @@ void Game::run()
 bool Game::dump(const std::string& output_path) const
 {
     // Implement your code here
-    return false;
+    bool fet = m_board.dump(output_path);
+    if (fet)
+    {
+        
+    }
+    return fet;
 }
 
 bool Game::load(const std::string& input_path)
