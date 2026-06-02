@@ -202,11 +202,11 @@ bool Game::dump(const std::string& output_path) const
         fitxer.close();
     }
     return fet;
-}
+} 
 
 bool Game::load(const std::string& input_path)
 {
-    // Implement your code her
+    // Implement your code here
     return false;
 }
 

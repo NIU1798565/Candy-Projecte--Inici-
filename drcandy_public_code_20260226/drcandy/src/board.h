@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <istream>
 
 
 #include "candy.h"
@@ -82,6 +83,14 @@ public:
     * @return true if the load was successful, false otherwise.
     */
    bool load(const std::string& input_path);
+
+   /**
+    * Load a serialized representation of the board from an open input stream.
+    * The stream should be positioned at the start of the board data (after any header if applicable).
+    * Any existing board state is discarded.
+    * @return true if the load was successful, false otherwise.
+    */
+   bool load(std::istream& in);
 
 
    /**

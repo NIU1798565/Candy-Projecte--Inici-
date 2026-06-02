@@ -463,21 +463,31 @@ bool Board::dump(const std::string& output_path) const //DONE
     return result;
 }
 
-bool Board::load(const std::string& input_path)
+bool Board::load(std::istream& in)
 {
     bool result = false;
 
-    std::ifstream fitxer(input_path);
-
-    if (fitxer.is_open())
+    char c;
+    bool error = false;
+    std::string header;
+    if (!(in >> header)) 
     {
-        char c;
-        bool error = false;
-
+        error = true;
+    }
+    else
+    {
+        
+    }
+    if (header == "m_board")
+    {
         for (int i = 0; i < m_boardWidth; i++)
         {
             for (int j = 0; j < m_boardHeight; j++)
             {
+                if (m_cell[i][j] != nullptr)
+                {
+                    delete m_cell[i][j];
+                }
                 m_cell[i][j] = nullptr;
                 m_boardExplode[i][j] = false;
             }
@@ -487,7 +497,7 @@ bool Board::load(const std::string& input_path)
         {
             for (int j = 0; j < m_boardHeight && !error; j++)
             {
-                if (!(fitxer >> c))
+                if (!(in >> c))
                 {
                     error = true;
                 }
@@ -522,10 +532,21 @@ bool Board::load(const std::string& input_path)
                 }
             }
         }
-
-        fitxer.close();
-        result = !error;
+    }
+    else
+    {
+        error = true;
     }
 
+    result = !error;
     return result;
+}
+
+bool Board::load(const std::string& input_path)
+{
+    std::ifstream fitxer(input_path);
+    if (!fitxer.is_open()) return false;
+    bool res = load(fitxer);
+    fitxer.close();
+    return res;
 }
