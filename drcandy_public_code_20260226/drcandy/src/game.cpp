@@ -72,6 +72,7 @@ void Game::update(const Controller& controller)
 void Game::render(GraphicManager& graphics)
 {
     // Implement your code here
+    aasdasda
     
     // Note: the following code exhibits the main graphic library features
     // Board: border [draw rectangles] and a single piece of candy
