@@ -32,6 +32,18 @@ Board::Board(int width, int height)
 
 Board::~Board()
 {
+    for (int i = 0; i < DEFAULT_BOARD_WIDTH; i++)
+    {
+        for (int j = 0; j < DEFAULT_BOARD_HEIGHT; j++)
+        {
+            if (m_cell[i][j] != nullptr)
+            {
+                delete m_cell[i][j];
+            }
+            m_cell[i][j] = nullptr;
+            m_boardExplode[i][j] = false;
+        }
+    }
 }
 
 
