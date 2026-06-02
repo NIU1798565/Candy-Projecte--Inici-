@@ -59,10 +59,8 @@ public:
 private:
     Board m_board;
 
-    // Bloc que cau 2 caramels
-    // m_falling[0] = peça superior (si vertical) o esquerra (si horitzontal)
-    // m_falling[1] = peça inferior o dreta
-    Candy* m_falling[2];
+    // Bloc que cau de 3 caramels (vertical: [0] dalt, [1] mig, [2] baix)
+    Candy* m_falling[3];
     int m_fallingX;   // columna del tauler de m_falling[0]
     int m_fallingY;   // fila del tauler de m_falling[0]
     bool m_vertical;  // true = bloc vertical, false = horitzontal

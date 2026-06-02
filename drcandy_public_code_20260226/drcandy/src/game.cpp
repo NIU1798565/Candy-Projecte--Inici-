@@ -10,9 +10,10 @@ Game::Game()
     m_puntuacio = 0;
     m_falling[0] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
     m_falling[1] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
+    m_falling[2] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
 
-    m_fallingX = 4; // posicio horitzontal a la que apareix el blockd de candies
-    m_fallingY = 0; // 0 perque sigui la fila d'adalt del tot
+    m_fallingX = 4;
+    m_fallingY = 0;
     m_fallTimer = 30; /* comptador que anem decrementant a cada 
                       frame que pasa decreix de manera que a meitat 
                       de cicle (60 frames) s'actualitza */
@@ -22,6 +23,7 @@ Game::~Game() //nomes es crida quan el programa tanca
 {
     delete m_falling[0];
     delete m_falling[1];
+    delete m_falling[2];
 }
 
 void Game::update(const Controller& controller)
@@ -35,39 +37,56 @@ void Game::update(const Controller& controller)
             m_fallingX--;
         }
 
-        if (controller.isRightPressed() && m_fallingX < 9)
+        if (controller.isRightPressed() && m_fallingX < m_board.getWidth() - 1)
         {
             m_fallingX++;
         }
 
-        if (controller.isDownPressed() && m_fallingY < 8) // 8 perque ocupa dues posicions la peça
+        if (controller.isDownPressed() && m_fallingY < m_board.getHeight() - 3)
         {
             m_fallingY++;
         }
 
+        // Tecla Q: rotar caramels del bloc (desplaçament cíclic cap amunt)
+        if (controller.isKey1Pressed())
+        {
+            Candy* tmp = m_falling[0];
+            m_falling[0] = m_falling[1];
+            m_falling[1] = m_falling[2];
+            m_falling[2] = tmp;
+        }
+
+        // Tecla W: guardar la partida
+        if (controller.isKey2Pressed())
+        {
+            dump("data/save.txt");
+        }
+
     // 2: Fer baixar el bloc automaticament
-        
+
         m_fallTimer--;
         if (m_fallTimer <= 0)
         {
-            m_fallingY++; // fem que baixi una posicio ja que han pasat els 30 frames
-            m_fallTimer = 30;
-        } 
+            m_fallingY++;
+            m_fallTimer = 60;
+        }
 
-
-    // 3: Detectar si el bloc ha aterrat
-        if (m_fallingY >= 8 || m_board.getCell(m_fallingX, m_fallingY + 2) != nullptr)
+    // 3: Detectar si el bloc ha aterrat (ocupa y, y+1, y+2)
+        if (m_fallingY >= m_board.getHeight() - 3 ||
+            m_board.getCell(m_fallingX, m_fallingY + 3) != nullptr)
         {
             m_board.setCell(m_falling[0], m_fallingX, m_fallingY);
             m_board.setCell(m_falling[1], m_fallingX, m_fallingY + 1);
+            m_board.setCell(m_falling[2], m_fallingX, m_fallingY + 2);
 
             m_board.explodeAndDrop();
 
             m_falling[0] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
             m_falling[1] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
+            m_falling[2] = new Candy(static_cast<CandyType>(rand() % static_cast<int>(CandyType::COUNT)));
             m_fallingX = 4;
             m_fallingY = 0;
-            m_fallTimer = 30; // aixi el nou bloc tambe inicia amb 30 frames
+            m_fallTimer = 60;
         }
 }
 
@@ -95,16 +114,18 @@ void Game::render(GraphicManager& graphics)
             }
         }
 
-    //Part 2: Dibuixar el bloc que cau
+    //Part 2: Dibuixar el bloc que cau (3 caramels en vertical)
         graphics.drawImage(m_falling[0]->getResourceName(),
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
                 board_padding * CANDY_IMAGE_HEIGHT + m_fallingY * CANDY_IMAGE_HEIGHT);
-        
+
         graphics.drawImage(m_falling[1]->getResourceName(),
                 board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
-                board_padding * CANDY_IMAGE_HEIGHT + m_fallingY * CANDY_IMAGE_HEIGHT);
-        /* al ser objectes dinamics hem d'utilitzar punters per accedir a la funcio getResourceName, utilitzem memoria dinamica perque aixi 
-        podem escollir quan desapareix l'objecte, si ho fessim amb objectes directes el creariem i desapareixeria en acabar la funcio */
+                board_padding * CANDY_IMAGE_HEIGHT + (m_fallingY + 1) * CANDY_IMAGE_HEIGHT);
+
+        graphics.drawImage(m_falling[2]->getResourceName(),
+                board_padding * CANDY_IMAGE_WIDTH + m_fallingX * CANDY_IMAGE_WIDTH,
+                board_padding * CANDY_IMAGE_HEIGHT + (m_fallingY + 2) * CANDY_IMAGE_HEIGHT);
 
     //Part 3: Dibuixar la puntuacio
         graphics.drawText("Puntaucio: " + std::to_string(m_puntuacio), 450, 10, 70, 125, 200, 125);
@@ -149,7 +170,7 @@ bool Game::dump(const std::string& output_path) const
         if(fitxer.is_open())
         {
             fitxer << "m_falling" << endl;
-            for(int i = 0; i < 2; i++)
+            for(int i = 0; i < 3; i++)
             {
                 switch (m_falling[i]->getType())
                 {
