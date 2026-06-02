@@ -232,7 +232,7 @@ bool Game::load(const std::string& input_path)
     std::string header;
     if (!(fitxer >> header) || header != "m_falling") return false;
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 3; i++)
     {
         char aux;
         if (!(fitxer >> aux)) return false;
