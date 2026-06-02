@@ -1,0 +1,7 @@
+# Carpeta de compilacio (es regenera en compilar)
+build/
+
+# Fitxers temporals de l'editor
+*.swp
+*~
+.DS_Store
