@@ -1,0 +1,3 @@
+/home/administrador/Descargas/1r_test_drcandy_public_code_20260226/drcandy_public_code_20260226/drcandy/build/CMakeFiles/p2_project.dir
+/home/administrador/Descargas/1r_test_drcandy_public_code_20260226/drcandy_public_code_20260226/drcandy/build/CMakeFiles/edit_cache.dir
+/home/administrador/Descargas/1r_test_drcandy_public_code_20260226/drcandy_public_code_20260226/drcandy/build/CMakeFiles/rebuild_cache.dir
