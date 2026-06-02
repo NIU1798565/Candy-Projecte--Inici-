@@ -182,58 +182,42 @@ bool Game::dump(const std::string& output_path) const
 
 bool Game::load(const std::string& input_path)
 {
-    bool fet = false;
     ifstream fitxer(input_path);
-    if (fitxer.is_open())
-    {
-        // load board des de la posició després de que ja hagi llegit el board
-        if (m_board.load(fitxer))
-        {
-            std::string header;
-            if (fitxer >> header && header == "m_falling")
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    char aux;
-                    CandyType tipus;
-                    fitxer >> aux;
-                    switch (aux)
-                    {
-                        case 'R': tipus = CandyType::TYPE_RED; break;
-                        case 'B': tipus = CandyType::TYPE_BLUE; break;
-                        case 'G': tipus = CandyType::TYPE_GREEN; break;
-                        case 'Y': tipus = CandyType::TYPE_YELLOW; break;
-                        case 'P': tipus = CandyType::TYPE_PURPLE; break;
-                        case 'O': tipus = CandyType::TYPE_ORANGE; break;
-                        default: fet = false; break;
-                    }
-                    if(fet)
-                    {
-                        if (m_falling[i] != nullptr) delete m_falling[i];
-                        m_falling[i] = new Candy(tipus);
-                    }
-                }    
-                fitxer >> m_fallingX;
-                fitxer >> m_fallingY;
-                fitxer >> m_vertical;
-                fitxer >> m_puntuacio;
-                fitxer >> m_fallTimer;
-                fitxer >> m_gameOver;
-            }
-            else 
-            {
-                fet = false;
-            }
-        }
-        else
-        {
-            fet = false;
-        }
+    if (!fitxer.is_open()) return false;
 
-        fitxer.close();
+    if (!m_board.load(fitxer)) return false;
+
+    std::string header;
+    if (!(fitxer >> header) || header != "m_falling") return false;
+
+    for (int i = 0; i < 2; i++)
+    {
+        char aux;
+        if (!(fitxer >> aux)) return false;
+        CandyType tipus;
+        switch (aux)
+        {
+            case 'R': tipus = CandyType::TYPE_RED;    break;
+            case 'B': tipus = CandyType::TYPE_BLUE;   break;
+            case 'G': tipus = CandyType::TYPE_GREEN;  break;
+            case 'Y': tipus = CandyType::TYPE_YELLOW; break;
+            case 'P': tipus = CandyType::TYPE_PURPLE; break;
+            case 'O': tipus = CandyType::TYPE_ORANGE; break;
+            default: return false;
+        }
+        delete m_falling[i];
+        m_falling[i] = new Candy(tipus);
     }
 
-    return fet;
+    std::string label;
+    fitxer >> label >> m_fallingX;
+    fitxer >> label >> m_fallingY;
+    fitxer >> label >> m_vertical;
+    fitxer >> label >> m_puntuacio;
+    fitxer >> label >> m_fallTimer;
+    fitxer >> label >> m_gameOver;
+
+    return fitxer.good() || fitxer.eof();
 }
 
 bool Game::operator==(const Game& other) const
