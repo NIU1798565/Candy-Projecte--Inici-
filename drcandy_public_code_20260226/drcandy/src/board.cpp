@@ -421,6 +421,7 @@ bool Board::dump(const std::string& output_path) const //DONE
 
     if (fitxer.is_open())
     {
+        fitxer << "m_board" << std::endl; 
         for (int i = 0; i < m_boardWidth; i++)
         {
             for (int j = 0; j < m_boardHeight; j++)

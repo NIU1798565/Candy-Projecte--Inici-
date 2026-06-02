@@ -2,7 +2,9 @@
 #include <random>
 #include "graphics.h"
 #include "candy.h"
+#include <fstream>
 
+using namespace std; 
 Game::Game()
 {
     m_puntuacio = 0;
@@ -109,9 +111,40 @@ bool Game::dump(const std::string& output_path) const
 {
     // Implement your code here
     bool fet = m_board.dump(output_path);
-    if (fet)
+    if(fet)
     {
-        
+        ofstream fitxer;
+        fitxer.open(output_path, ios::app); //per obrir en append
+        if(fitxer.is_open())
+        {
+            fitxer << "m_falling" << endl;
+            for(int i = 0; i < 2; i++)
+            {
+                switch (m_falling[i]->getType())
+                {
+                    case CandyType::TYPE_RED:    fitxer << "R "; break;
+                    case CandyType::TYPE_BLUE:   fitxer << "B "; break;
+                    case CandyType::TYPE_GREEN:  fitxer << "G "; break;
+                    case CandyType::TYPE_YELLOW: fitxer << "Y "; break;
+                    case CandyType::TYPE_PURPLE: fitxer << "P "; break;
+                    case CandyType::TYPE_ORANGE: fitxer << "O "; break;
+                    default: fitxer << "? "; break;
+                }
+            }
+            fitxer << endl;
+            fitxer << "m_fallingX" << endl << m_fallingX << endl;
+            fitxer << "m_fallingY" << endl << m_fallingY << endl;
+            fitxer << "m_vertical" << endl << m_vertical << endl;
+            fitxer << "m_puntuacio" << endl << m_puntuacio << endl;
+            fitxer << "m_fallTimer" << endl << m_fallTimer << endl;
+            fitxer << "m_gameOver" << endl << m_gameOver << endl;
+
+        }
+        else 
+        {
+            fet = false;
+        }
+        fitxer.close();
     }
     return fet;
 }
