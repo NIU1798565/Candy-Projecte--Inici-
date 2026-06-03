@@ -21,9 +21,11 @@ Board::Board(int width, int height)
     m_boardHeight = height;
 
     m_cell = new Candy**[m_boardWidth];
+    m_boardExplode = new bool*[m_boardWidth];
     for(int i = 0; i < m_boardWidth; i++)
     {
         m_cell[i] = new Candy*[m_boardHeight];
+        m_boardExplode[i] = new bool[m_boardHeight];
     }
     for (int x = 0; x < m_boardWidth; x++)
     {
@@ -39,9 +41,15 @@ Board::~Board()
 {
     for (int i = 0; i < m_boardWidth; i++)
     {
-        delete[] m_cell[i];
+        for (int j = 0; j < m_boardHeight; j++)
+        {
+            delete m_cell[i][j]; // esborra cada objecte Candy en si
+        }
+        delete[] m_cell[i]; // esborra cada array de Candy*
+        delete[] m_boardExplode[i]; // esborra cada array de bools
     }
-    delete[] m_cell;
+    delete[] m_cell; //esborra array de punters a files
+    delete[] m_boardExplode; // esborra array de punters a bools
 }
 
 
@@ -348,8 +356,8 @@ void Board::eliminaExplosions(std::vector<Candy*>& exploded)
         {
             if (m_boardExplode[x][y] && m_cell[x][y] != nullptr)
             {
-                exploded.push_back(new Candy(*m_cell[x][y]));
-                m_cell[x][y] = nullptr;
+                exploded.push_back(m_cell[x][y]); // el vector agafa el punter original
+                m_cell[x][y] = nullptr; // el tauler ja no l'apunta, d'aquesta manera nomes tenim un objecte
             }
         }
     }

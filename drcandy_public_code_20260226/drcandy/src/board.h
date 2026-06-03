@@ -138,7 +138,7 @@ private:
     int m_boardWidth;
     int m_boardHeight;
     Candy*** m_cell;
-    bool m_boardExplode[DEFAULT_BOARD_WIDTH][DEFAULT_BOARD_HEIGHT];
+    bool** m_boardExplode;
 
     bool hiHaExplosions() const;
     void reiniciaExplosions();
