@@ -1,8 +1,8 @@
 #include <filesystem>
 #include "board.h"
 #include "candy.h"
-//#include "controller.h"
-//#include "game.h"
+#include "controller.h"
+#include "game.h"
 #include "util.h"
 #include <fstream>
 #include <iostream>
@@ -134,7 +134,6 @@ bool test()
         }
 
     // TEST 3 Dump and load game
-    /*
     {
         Game g;
         Controller cont;
@@ -154,7 +153,7 @@ bool test()
         }
         std::filesystem::remove(getDataDirPath() + "dump_game.txt");
     }
-    */
+    
 
     //TEST 4 comprovar que despres de crear un board totes les caselles son buides
     {
@@ -418,6 +417,66 @@ bool test()
     else
         return false;
     
+    }
+
+    //TEST 10   shouldExplode: cas valid (3 en linia) i casos invalids (aïllat i casella buida)
+    {
+        Board b(5, 5);
+        AutoCleanupBoard cleanupBoard(b);
+        bool error = false;
+
+        // 3 vermells en fila horitzontal → la central ha d'explotar
+        b.setCell(new Candy(CandyType::TYPE_RED), 0, 0);
+        b.setCell(new Candy(CandyType::TYPE_RED), 1, 0);
+        b.setCell(new Candy(CandyType::TYPE_RED), 2, 0);
+
+        if (!b.shouldExplode(1, 0))
+        {
+            error = true;
+            cout << "ERROR TEST 10: shouldExplode(1,0) hauria de retornar true" << endl;
+        }
+
+        // peça aïllada → no ha d'explotar
+        b.setCell(new Candy(CandyType::TYPE_BLUE), 4, 4);
+        if (b.shouldExplode(4, 4))
+        {
+            error = true;
+            cout << "ERROR TEST 10: shouldExplode(4,4) peça aïllada hauria de retornar false" << endl;
+        }
+
+        // casella buida → no ha d'explotar
+        if (b.shouldExplode(3, 3))
+        {
+            error = true;
+            cout << "ERROR TEST 10: shouldExplode(3,3) casella buida hauria de retornar false" << endl;
+        }
+
+        if (!error)
+            cout << "TEST 10 OK" << endl;
+        else
+            return false;
+    }
+
+    //TEST 11   Game::load amb ruta invalida ha de retornar false
+    {
+        Game g;
+        if (g.load("fitxer_que_no_existeix.txt"))
+        {
+            cout << "ERROR TEST 11: load amb ruta invalida hauria de retornar false" << endl;
+            return false;
+        }
+        cout << "TEST 11 OK" << endl;
+    }
+
+    //TEST 12   Game::operator== una partida es igual a si mateixa
+    {
+        Game g;
+        if (!(g == g))
+        {
+            cout << "ERROR TEST 12: una partida ha de ser igual a si mateixa" << endl;
+            return false;
+        }
+        cout << "TEST 12 OK" << endl;
     }
 
     return true;

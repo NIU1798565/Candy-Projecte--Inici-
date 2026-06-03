@@ -1,0 +1,25 @@
+m_board
+. . . . . . . P R Y 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+. . . . . . . . . . 
+m_falling
+B G B 
+m_fallingX
+4
+m_fallingY
+1
+m_vertical
+1
+m_puntuacio
+0
+m_fallTimer
+59
+m_gameOver
+0
