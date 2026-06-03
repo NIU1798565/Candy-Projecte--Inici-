@@ -96,7 +96,7 @@ void Game::update(const Controller& controller)
             m_fallingY = 0;
             m_fallTimer = 60;
 
-            if(m_board.getCell(4,0) != nullptr || m_board.getCell(4,1) != nullptr || m_board.getCell(4,2))
+            if(m_board.getCell(4,0) != nullptr || m_board.getCell(4,1) != nullptr || m_board.getCell(4,2) != nullptr)
             {
                 m_gameOver = true;
             }
