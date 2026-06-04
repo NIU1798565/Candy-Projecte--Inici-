@@ -34,10 +34,13 @@ crec que es mes adient si implemento els helpers a test.cpp que s'encarregueran 
 i test.h no s'avaluan a gradescope i aixi puc parlar d'aquest problema quan toqui presentar el codi i corre els tests.
 */
 
-//HELPERS
+// HELPERS: funcions per netejar memoria als tests
+// com el board no esborra els candy que li passem nosaltres via setCell
+// hem de fer-ho manualment al final de cada test per no tenir fuites
 
 void alliberaBoard(Board& b)
 {
+    // recorrem tot el tauler i esborrem els candy que hi hagi
     for (int x = 0; x < b.getWidth(); x++)
     {
         for (int y = 0; y < b.getHeight(); y++)
@@ -45,6 +48,7 @@ void alliberaBoard(Board& b)
             const Candy* c = b.getCell(x, y);
             if (c != nullptr)
             {
+                // const_cast perque getCell retorna const Candy* pero hem de poder fer delete
                 delete const_cast<Candy*>(c);
                 b.setCell(nullptr, x, y);
             }
@@ -54,6 +58,7 @@ void alliberaBoard(Board& b)
 
 void alliberaExploded(std::vector<Candy*>& exploded)
 {
+    // esborrem tots els candy del vector i el buidem
     for (Candy* c : exploded)
     {
         delete c;
@@ -61,6 +66,8 @@ void alliberaExploded(std::vector<Candy*>& exploded)
     exploded.clear();
 }
 
+// struct que crida alliberaBoard automaticament quan surt del scope
+// aixi no hem d'estar pendents de cridar-lo manualment a cada return
 struct AutoCleanupBoard
 {
     Board& board;
@@ -73,6 +80,7 @@ struct AutoCleanupBoard
     }
 };
 
+// igual pero pel vector d'explotats
 struct AutoCleanupExploded
 {
     std::vector<Candy*>& exploded;
@@ -85,7 +93,7 @@ struct AutoCleanupExploded
     }
 };
 
-//END HELPERS
+// END HELPERS
 
 bool test()
 {
@@ -419,7 +427,7 @@ bool test()
     
     }
 
-    //TEST 10   shouldExplode: cas valid (3 en linia) i casos invalids (aïllat i casella buida)
+    //TEST 10  cas valid (3 en linia) i casos invalids (aïllat i casella buida)
     {
         Board b(5, 5);
         AutoCleanupBoard cleanupBoard(b);
@@ -457,7 +465,7 @@ bool test()
             return false;
     }
 
-    //TEST 11   Game::load amb ruta invalida ha de retornar false
+    //TEST 11   load amb ruta invalida ha de retornar false
     {
         Game g;
         if (g.load("fitxer_que_no_existeix.txt"))
@@ -468,7 +476,7 @@ bool test()
         cout << "TEST 11 OK" << endl;
     }
 
-    //TEST 12   Game::operator== una partida es igual a si mateixa
+    //TEST 12   operator== una partida es igual a si mateixa
     {
         Game g;
         if (!(g == g))

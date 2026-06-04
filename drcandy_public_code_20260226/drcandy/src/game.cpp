@@ -271,11 +271,13 @@ bool Game::operator==(const Game& other) const
 {
     bool cerca = true;
 
-    //1: Dimensions del tauler
+    //1: primer comprovem que les dimensions siguin iguals
     if (m_board.getWidth() != other.m_board.getWidth())   cerca = false;
     if (m_board.getHeight() != other.m_board.getHeight()) cerca = false;
 
-    //2: Contingut de cada cel·la (comparar tipus, no punters)
+    //2: recorrem cada casella i comparem el tipus del caramel, no el punter
+    // perque dos punters diferentes poden tenir el mateix tipus i ser iguals
+    // el && cerca es per no seguir si ja hem trobat una diferencia
     for (int x = 0; x < m_board.getWidth() && cerca; x++)
     {
         for (int y = 0; y < m_board.getHeight() && cerca; y++)
@@ -285,19 +287,19 @@ bool Game::operator==(const Game& other) const
 
             if (a == nullptr && b == nullptr)
             {
-                //tot bé
+                // les dos buides, no fem res
             }
-            else if (a == nullptr || b == nullptr)      
-                cerca = false;
-            else if (a->getType() != b->getType())      
-                cerca = false;
+            else if (a == nullptr || b == nullptr)
+                cerca = false; // una buida i l'altra no
+            else if (a->getType() != b->getType())
+                cerca = false; // tipus diferent
         }
     }
 
-    //3: Bloc que cau (posicio i tipus)
-    if (m_fallingX != other.m_fallingX) 
+    //3: comprovem el bloc que cau, posicio i tipus dels 3 caramels
+    if (m_fallingX != other.m_fallingX)
         cerca = false;
-    if (m_fallingY != other.m_fallingY) 
+    if (m_fallingY != other.m_fallingY)
         cerca = false;
     for (int i = 0; i < 3 && cerca; i++)
     {
