@@ -41,14 +41,10 @@ Board::~Board()
 {
     for (int i = 0; i < m_boardWidth; i++)
     {
-        for (int j = 0; j < m_boardHeight; j++)
-        {
-            delete m_cell[i][j]; // esborra cada objecte Candy en si
-        }
         delete[] m_cell[i]; // esborra cada array de Candy*
         delete[] m_boardExplode[i]; // esborra cada array de bools
     }
-    delete[] m_cell; //esborra array de punters a files
+    delete[] m_cell; // esborra array de punters a files
     delete[] m_boardExplode; // esborra array de punters a bools
 }
 
